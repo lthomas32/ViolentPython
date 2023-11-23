@@ -1,7 +1,9 @@
 from socket import *
 from threading import *
 
-SCREENLOCK = Semaphore(value=1)
+SCREEN_LOCK = Semaphore(value=1)
+
+
 def banner_info(socketConnection):
     try:
         setdefaulttimeout(1)
@@ -12,20 +14,22 @@ def banner_info(socketConnection):
     except:
         print("No information was gathered.")
 
+
 def conn_scan(tgtHost, tgtPort, bannerInfo):
     try:
         connection = socket(AF_INET, SOCK_STREAM)
         connection.connect((tgtHost, tgtPort))
-        SCREENLOCK.acquire()
+        SCREEN_LOCK.acquire()
         print(f'\nPort {tgtPort} is open')
         if bannerInfo is True:
             banner_info(connection)
     except:
-        SCREENLOCK.acquire()
+        SCREEN_LOCK.acquire()
         print(f'\nPort {tgtPort} is closed')
     finally:
-        SCREENLOCK.release()
+        SCREEN_LOCK.release()
         connection.close()
+
 
 def port_scan(tgtHost, tgtPorts, bannerInfo):
     try:
