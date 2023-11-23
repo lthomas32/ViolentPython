@@ -17,14 +17,19 @@ parser.add_option('-v', dest='bannerInfo', default=False,
 # returns a dictionary like object from optparse.Values into options and a list of leftover arguments
 options, args = parser.parse_args()
 target = options.tgtHost
-port = options.tgtPort.split(",")
+ports = options.tgtPort.split(",")
 bannerInfo = options.bannerInfo
 
-if (target is None) | (port is None):
+if (target is None) | (ports is None):
     print("Invalid arguments")
     sys.exit(0)
+
+
 def main():
-    ScannerMethods.port_scan(target, port, bannerInfo)
+    ScannerMethods.port_scan(target, ports, bannerInfo)
+    for port in ports:
+        ScannerMethods.nmap_scan(target, port)
+
 
 if __name__ == "__main__":
     main()

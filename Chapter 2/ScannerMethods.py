@@ -1,7 +1,16 @@
+import socket
 from socket import *
 from threading import *
+import nmap
 
 SCREEN_LOCK = Semaphore(value=1)
+
+
+def nmap_scan(tgtHost, tgtPort):
+    nmScan = nmap.PortScanner()
+    results = nmScan.scan(tgtHost, tgtPort)
+    status = results['scan'][tgtHost]['tcp'][int(tgtPort)]['state']
+    print(f'{tgtHost} tcp/{tgtPort} {status}')
 
 
 def banner_info(socketConnection):
@@ -42,8 +51,20 @@ def port_scan(tgtHost, tgtPorts, bannerInfo):
         print(f"Scan Results for: {tgtName[0]}")
     except:
         print(f"Scan Results for: {tgtIP}")
+    threads = thread_conn_scann(tgtHost, tgtPorts, bannerInfo)
+    clean_threads(threads)
 
+
+def thread_conn_scann(tgtHost,tgtPorts, bannerInfo):
     setdefaulttimeout(1)
+    threads = []
     for tgtPort in tgtPorts:
-        t = Thread(target=conn_scan, args =(tgtHost,int(tgtPort),bannerInfo))
+        t = Thread(target=conn_scan, args=(tgtHost, int(tgtPort), bannerInfo))
+        threads.append(t)
         t.start()
+    return threads
+
+
+def clean_threads(threads):
+    for thread in threads:
+        thread.join()
