@@ -17,12 +17,12 @@ def conn_scan(tgtHost, tgtPort, bannerInfo):
         connection = socket(AF_INET, SOCK_STREAM)
         connection.connect((tgtHost, tgtPort))
         SCREENLOCK.acquire()
-        print(f'Port {tgtPort} is open')
+        print(f'\nPort {tgtPort} is open')
         if bannerInfo is True:
             banner_info(connection)
     except:
         SCREENLOCK.acquire()
-        print(f'Port {tgtPort} is closed\n')
+        print(f'\nPort {tgtPort} is closed')
     finally:
         SCREENLOCK.release()
         connection.close()
