@@ -7,7 +7,8 @@ def banner_info(socketConnection):
         setdefaulttimeout(1)
         socketConnection.send(b"ViolentPython\r\n")
         results = socketConnection.recv(100)
-        print(results.decode())
+        print(results.decode().strip())
+        print()
     except:
         print("No information was gathered.")
 
@@ -21,7 +22,7 @@ def conn_scan(tgtHost, tgtPort, bannerInfo):
             banner_info(connection)
     except:
         SCREENLOCK.acquire()
-        print(f'Port {tgtPort} is closed')
+        print(f'Port {tgtPort} is closed\n')
     finally:
         SCREENLOCK.release()
         connection.close()
