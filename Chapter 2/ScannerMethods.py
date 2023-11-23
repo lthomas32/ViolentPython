@@ -4,12 +4,12 @@ from threading import *
 SCREENLOCK = Semaphore(value=1)
 def banner_info(socketConnection):
     try:
+        setdefaulttimeout(1)
         socketConnection.send(b"ViolentPython\r\n")
         results = socketConnection.recv(100)
         print(results.decode())
     except:
         print("No information was gathered.")
-
 
 def conn_scan(tgtHost, tgtPort, bannerInfo):
     try:
@@ -18,7 +18,7 @@ def conn_scan(tgtHost, tgtPort, bannerInfo):
         SCREENLOCK.acquire()
         print(f'Port {tgtPort} is open')
         if bannerInfo is True:
-            bannerInfo(connection)
+            banner_info(connection)
     except:
         SCREENLOCK.acquire()
         print(f'Port {tgtPort} is closed')
