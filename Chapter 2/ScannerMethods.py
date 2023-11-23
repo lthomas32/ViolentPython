@@ -15,8 +15,8 @@ def conn_scan(tgtHost, tgtPort, bannerInfo):
     try:
         connection = socket(AF_INET, SOCK_STREAM)
         connection.connect((tgtHost, tgtPort))
-        print(f'Port {tgtPort} is open')
         SCREENLOCK.acquire()
+        print(f'Port {tgtPort} is open')
         if bannerInfo is True:
             bannerInfo(connection)
     except:
@@ -40,5 +40,5 @@ def port_scan(tgtHost, tgtPorts, bannerInfo):
 
     setdefaulttimeout(1)
     for tgtPort in tgtPorts:
-        t = Thread(target=conn_scan, args =(tgtHost,tgtPort,bannerInfo))
+        t = Thread(target=conn_scan, args =(tgtHost,int(tgtPort),bannerInfo))
         t.start()
